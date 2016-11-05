@@ -1,4 +1,8 @@
+import os
+import django
 from django.conf import global_settings
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 SECRET_KEY = '!DJANGO_JET_TESTS!'
 
@@ -28,9 +32,26 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
-    'django.core.context_processors.request',
-)
+if django.VERSION[:2] < (1, 9):
+    TEMPLATE_CONTEXT_PROCESSORS = tuple(global_settings.TEMPLATE_CONTEXT_PROCESSORS) + (
+        'django.core.context_processors.request',
+    )
+else:
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [os.path.join(BASE_DIR, 'templates')],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': (
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.request',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.contrib.messages.context_processors.messages',
+                )
+            },
+        },
+    ]
 
 DATABASES = {
     'default': {
@@ -48,6 +69,5 @@ MEDIA_URL = ''
 
 STATIC_URL = '/static/'
 
-
-
-
+JET_INDEX_DASHBOARD = 'jet.tests.dashboard.TestIndexDashboard'
+JET_APP_INDEX_DASHBOARD = 'jet.tests.dashboard.TestAppIndexDashboard'

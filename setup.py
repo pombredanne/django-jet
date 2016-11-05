@@ -1,9 +1,14 @@
 import os
-from setuptools import setup, find_packages 
+from setuptools import setup, find_packages
 
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    path = os.path.join(os.path.dirname(__file__), fname)
+    try:
+        file = open(path, encoding='utf-8')
+    except TypeError:
+        file = open(path)
+    return file.read()
 
 
 def get_install_requires():
@@ -23,12 +28,12 @@ setup(
     author_email='support@jet.geex-arts.com',
     url='https://github.com/geex-arts/django-jet',
     packages=find_packages(),
-    license='GPLv2',
+    license='AGPLv3',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Framework :: Django',
         'License :: Free for non-commercial use',
-        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+        'License :: OSI Approved :: GNU Affero General Public License v3',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
         'Operating System :: OS Independent',
